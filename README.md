@@ -1,3 +1,5 @@
+## 目录
+
 - [剑指 Offer 03. 数组中重复的数字](#剑指-Offer-03-数组中重复的数字)
 - [剑指 Offer 04. 二维数组中的查找](#剑指-Offer-04-二维数组中的查找)
 - [剑指 Offer 06. 从尾到头打印链表](#剑指-Offer-06-从尾到头打印链表)
@@ -17,6 +19,16 @@
 - [剑指 Offer 19. 正则表达式匹配](#剑指-Offer-19-正则表达式匹配)
 - [剑指 Offer 20. 表示数值的字符串](#剑指-Offer-20-表示数值的字符串)
 - [剑指 Offer 21. 调整数组顺序使奇数位于偶数前面](#剑指-Offer-21-调整数组顺序使奇数位于偶数前面)
+- [剑指 Offer 20. 表示数值的字符串](#剑指-Offer-20-表示数值的字符串)
+- [剑指 Offer 21. 调整数组顺序使奇数位于偶数前面](#剑指-Offer-21-调整数组顺序使奇数位于偶数前面)
+- [剑指 Offer 22. 链表中倒数第k个节点](#剑指-Offer-22-链表中倒数第k个节点)
+- [剑指 Offer 24. 反转链表](#剑指-Offer-24-反转链表)
+- [剑指 Offer 25. 合并两个排序的链表](#剑指-Offer-25-合并两个排序的链表)
+- [剑指 Offer 26. 树的子结构](#剑指-Offer-26-树的子结构)
+- [剑指 Offer 27. 二叉树的镜像](#剑指-Offer-27-二叉树的镜像)
+- [剑指 Offer 28. 对称的二叉树](#剑指-Offer-28-对称的二叉树)
+- [剑指 Offer 29. 顺时针打印矩阵](#剑指-Offer-29-顺时针打印矩阵)
+- [剑指 Offer 30. 包含min函数的栈](#剑指-Offer-30-包含min函数的栈)
 
 ## 剑指 Offer 03. 数组中重复的数字
 
@@ -1533,6 +1545,532 @@ leetcode链接：[https://leetcode-cn.com/problems/diao-zheng-shu-zu-shun-xu-shi
 
 ### 题目描述
 
+输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有奇数位于数组的前半部分，所有偶数位于数组的后半部分。
+
+**示例：**
+
+```
+输入：nums = [1,2,3,4]
+输出：[1,3,2,4]
+注：[3,1,2,4] 也是正确的答案之一。
+```
+
+**提示：**
+
+- 1 <= nums.length <= 50000
+- 1 <= nums[i] <= 10000
+
+### 解法
+
+双指针交换数据
+
+### 代码
+
+```java
+import org.junit.Assert;
+
+public class Solution {
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+    }
+
+    public int[] exchange(int[] nums) {
+        if (nums == null || nums.length <= 1) return nums;
+
+        int first = 0, last = nums.length - 1;
+
+        while (first < nums.length && last >= 0 && first < last) {
+            while (nums[first] % 2 == 0 && first < last) {
+                int t = nums[first];
+                nums[first] = nums[last];
+                nums[last] = t;
+                last--;
+            }
+            first++;
+        }
+
+        return nums;
+    }
+}
+
+```
+
+## 剑指 Offer 22. 链表中倒数第k个节点
+
+leetcode链接：[https://leetcode-cn.com/problems/lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof/](https://leetcode-cn.com/problems/lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof/)
+
+### 题目描述
+
+输入一个链表，输出该链表中倒数第 k 个节点。为了符合大多数人的习惯，本题从 1 开始计数，即链表的尾节点是倒数第 1 个节点。例如，一个链表有 6 个节点，从头节点开始，它们的值依次是 1、2、3、4、5、6。这个链表的倒数第 3
+个节点是值为 4 的节点。
+
+**示例：**
+
+给定一个链表: 1->2->3->4->5, 和 k = 2.
+
+返回链表 4->5.
+
+### 解法
+
+双指针，间隔K
+
+### 代码
+
+```java
+public class Solution {
+    public static void main(String[] args) {
+
+    }
+
+    public ListNode getKthFromEnd(ListNode head, int k) {
+        ListNode first = head;
+        ListNode last = head;
+        while (k != 0 && last != null) {
+            last = last.next;
+            k--;
+        }
+        if (k != 0) {
+            return first;
+        }
+        while (last != null) {
+            first = first.next;
+            last = last.next;
+        }
+        return first;
+    }
+}
+
+```
+
+## 剑指 Offer 24. 反转链表
+
+leetcode链接：[https://leetcode-cn.com/problems/fan-zhuan-lian-biao-lcof/](https://leetcode-cn.com/problems/fan-zhuan-lian-biao-lcof/)
+
+### 题目描述
+
+定义一个函数，输入一个链表的头节点，反转该链表并输出反转后链表的头节点。
+
+**示例:**
+
+```
+输入: 1->2->3->4->5->NULL
+输出: 5->4->3->2->1->NULL
+```
+
+**限制：**
+
+- `0 <= 节点个数 <= 5000`
+
+### 解法
+迭代反转
+### 代码
+
+```java
+public class Solution {
+    public static void main(String[] args) {
+        ListNode head = new ListNode(1);
+        head.next = new ListNode(2);
+        head.next.next = new ListNode(3);
+        head = new Solution().reverseList(head);
+        while (head != null) {
+            System.out.println(head.val);
+            head = head.next;
+        }
+    }
+
+    public ListNode reverseList(ListNode head) {
+        if (head == null || head.next == null) return head;
+        ListNode pre = head;
+        ListNode cur = head.next;
+
+        pre.next = null;
+        while (cur != null) {
+            ListNode next = cur.next;
+
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+        return pre;
+    }
+}
+
+```
+
+## 剑指 Offer 25. 合并两个排序的链表
+
+leetcode链接：[https://leetcode-cn.com/problems/he-bing-liang-ge-pai-xu-de-lian-biao-lcof/](https://leetcode-cn.com/problems/he-bing-liang-ge-pai-xu-de-lian-biao-lcof/)
+
+### 题目描述
+输入两个递增排序的链表，合并这两个链表并使新链表中的节点仍然是递增排序的。
+
+**示例 1：**
+
+```
+输入：1->2->4, 1->3->4
+输出：1->1->2->3->4->4
+```
+
+**限制：**
+
+- `0 <= 链表长度 <= 1000`
+### 解法
+遍历两个列表
+### 代码
+
+```java
+public class Solution {
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+
+        ListNode l1 = new ListNode(1);
+        l1.next = new ListNode(2);
+        l1.next.next = new ListNode(4);
+
+        ListNode l2 = new ListNode(1);
+        l2.next = new ListNode(3);
+        l2.next.next = new ListNode(4);
+
+        ListNode newList = solution.mergeTwoLists(l1, l2);
+        while (newList != null) {
+            System.out.println(newList.val);
+            newList = newList.next;
+        }
+    }
+
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if (l1 == null) return l2;
+        if (l2 == null) return l1;
+
+        ListNode dummyHead = new ListNode(-1);
+        ListNode cur = dummyHead;
+
+        while (l1 != null && l2 != null) {
+            if (l1.val < l2.val) {
+                l1 = addNodeToNew(cur, l1);
+            } else {
+                l2 = addNodeToNew(cur, l2);
+            }
+            cur = cur.next;
+        }
+
+        if (l1 != null) {
+            cur.next = l1;
+        }
+        if (l2 != null) {
+            cur.next = l2;
+        }
+
+        return dummyHead.next;
+    }
+
+    private ListNode addNodeToNew(ListNode newList, ListNode node) {
+        newList.next = node;
+        return node.next;
+    }
+}
+
+```
+
+## 剑指 Offer 26. 树的子结构
+
+leetcode链接：[https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/](https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/)
+
+### 题目描述
+输入两棵二叉树 A 和 B，判断 B 是不是 A W 的子结构。(约定空树不是任意一个树的子结构)
+
+B 是 A 的子结构， 即 A 中有出现和 B 相同的结构和节点值。
+
+**例如:**
+
+给定的树 A:
+
+```
+     3
+    / \
+   4   5
+  / \
+ 1   2
+```
+
+给定的树 B：
+
+```
+   4 
+  /
+ 1
+```
+
+返回 true，因为 B 与 A 的一个子树拥有相同的结构和节点值。
+
+**示例 1：**
+
+```
+输入：A = [1,2,3], B = [3,1]
+输出：false
+```
+
+**示例 2：**
+
+```
+输入：A = [3,4,5,1,2], B = [4,1]
+输出：true
+```
+
+**限制：**
+
+- `0 <= 节点个数 <= 10000`
+### 解法
+
+### 代码
+
+```java
+
+public class Solution {
+    public static void main(String[] args) {
+
+    }
+
+    public boolean isSubStructure(TreeNode A, TreeNode B) {
+        return (A != null && B != null) && (recur(A, B) || isSubStructure(A.left, B) || isSubStructure(A.right, B));
+    }
+
+    private boolean recur(TreeNode A, TreeNode B) {
+        if (B == null) return true;
+        if (A == null || A.val != B.val) return false;
+        return recur(A.left, B.left) && recur(A.right, B.right);
+    }
+}
+
+```
+
+## 剑指 Offer 27. 二叉树的镜像
+
+leetcode链接：[https://leetcode-cn.com/problems/er-cha-shu-de-jing-xiang-lcof/](https://leetcode-cn.com/problems/er-cha-shu-de-jing-xiang-lcof/)
+
+### 题目描述
+请完成一个函数，输入一个二叉树，该函数输出它的镜像。
+
+例如输入：
+
+```
+     4
+   /   \
+  2     7
+ / \   / \
+1   3 6   9
+```
+
+镜像输出：
+
+```
+     4
+   /   \
+  7     2
+ / \   / \
+9   6 3   1
+```
+
+**示例 1：**
+
+```
+输入：root = [4,2,7,1,3,6,9]
+输出：[4,7,2,9,6,3,1]
+```
+
+**限制：**
+
+- `0 <= 节点个数 <= 1000`
+### 解法
+递归
+### 代码
+
+```java
+public class Solution {
+    public static void main(String[] args) {
+
+    }
+
+    public TreeNode mirrorTree(TreeNode root) {
+        if (root == null) return null;
+
+        TreeNode t = root.left;
+        root.left = root.right;
+        root.right = t;
+
+        mirrorTree(root.left);
+        mirrorTree(root.right);
+        return root;
+    }
+}
+
+```
+## 剑指 Offer 28. 对称的二叉树
+leetcode链接：[https://leetcode-cn.com/problems/dui-cheng-de-er-cha-shu-lcof/](https://leetcode-cn.com/problems/dui-cheng-de-er-cha-shu-lcof/)
+
+### 题目描述
+请实现一个函数，用来判断一棵二叉树是不是对称的。如果一棵二叉树和它的镜像一样，那么它是对称的。
+
+例如，二叉树  `[1,2,2,3,4,4,3]` 是对称的。
+
+```
+    1
+   / \
+  2   2
+ / \ / \
+3  4 4  3
+```
+
+但是下面这个  `[1,2,2,null,3,null,3]` 则不是镜像对称的:
+
+```
+    1
+   / \
+  2   2
+   \   \
+   3    3
+```
+
+**示例 1：**
+
+```
+输入：root = [1,2,2,3,4,4,3]
+输出：true
+```
+
+**示例 2：**
+
+```
+输入：root = [1,2,2,null,3,null,3]
+输出：false
+```
+### 解法
+
+### 代码
+
+```java
+package leetcode.problem28;
+
+import org.junit.Assert;
+
+public class Solution {
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(2);
+        root.left.left = new TreeNode(3);
+        root.left.right = new TreeNode(4);
+        root.right.left = new TreeNode(4);
+        root.right.right = new TreeNode(3);
+
+        Assert.assertTrue(solution.isSymmetric(root));
+
+        root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(2);
+        root.left.right = new TreeNode(3);
+        root.right.right = new TreeNode(3);
+        Assert.assertFalse(solution.isSymmetric(root));
+    }
+
+
+    public boolean isSymmetric(TreeNode root) {
+        if (root == null) return true;
+        return recur(root.left, root.right);
+    }
+
+    private boolean recur(TreeNode L, TreeNode R) {
+        if (L == null && R == null) return true;
+        if (L == null || R == null || L.val != R.val) return false;
+        return recur(L.left, R.right) && recur(L.right, R.left);
+    }
+}
+
+```
+
+## 剑指 Offer 29. 顺时针打印矩阵
+
+leetcode链接：[https://leetcode-cn.com/problems/shun-shi-zhen-da-yin-ju-zhen-lcof/](https://leetcode-cn.com/problems/shun-shi-zhen-da-yin-ju-zhen-lcof/)
+
+### 题目描述
+输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字。
+
+**示例 1：**
+
+```
+输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]
+输出：[1,2,3,6,9,8,7,4,5]
+```
+
+**示例 2：**
+
+```
+输入：matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]
+输出：[1,2,3,4,8,12,11,10,9,5,6,7]
+```
+
+**限制：**
+
+- `0 <= matrix.length <= 100`
+- `0 <= matrix[i].length <= 100`
+### 解法
+
+### 代码
+
+```java
+
+import org.junit.Assert;
+
+public class Solution {
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        int[][] matrix = new int[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+        Assert.assertArrayEquals(new int[]{1, 2, 3, 6, 9, 8, 7, 4, 5}, solution.spiralOrder(matrix));
+    }
+
+    public int[] spiralOrder(int[][] matrix) {
+        if (matrix.length == 0) return new int[0];
+        int l = 0, r = matrix[0].length - 1, t = 0, b = matrix.length - 1, x = 0;
+        int[] res = new int[(r + 1) * (b + 1)];
+        while (true) {
+            for (int i = l; i <= r; i++) res[x++] = matrix[t][i]; // left to right.
+            if (++t > b) break;
+            for (int i = t; i <= b; i++) res[x++] = matrix[i][r]; // top to bottom.
+            if (l > --r) break;
+            for (int i = r; i >= l; i--) res[x++] = matrix[b][i]; // right to left.
+            if (t > --b) break;
+            for (int i = b; i >= t; i--) res[x++] = matrix[i][l]; // bottom to top.
+            if (++l > r) break;
+        }
+        return res;
+    }
+}
+
+```
+
+## 剑指 Offer 30. 包含min函数的栈
+leetcode链接：[https://leetcode-cn.com/problems/bao-han-minhan-shu-de-zhan-lcof/](https://leetcode-cn.com/problems/bao-han-minhan-shu-de-zhan-lcof/)
+
+### 题目描述
+定义栈的数据结构，请在该类型中实现一个能够得到栈的最小元素的 min 函数在该栈中，调用 min、push 及 pop 的时间复杂度都是 O(1)。
+
+**示例:**
+
+```
+MinStack minStack = new MinStack();
+minStack.push(-2);
+minStack.push(0);
+minStack.push(-3);
+minStack.min();   --> 返回 -3.
+minStack.pop();
+minStack.top();      --> 返回 0.
+minStack.min();   --> 返回 -2.
+```
+
+**提示：**
+
+- 各函数的调用总次数不超过 20000 次
 ### 解法
 
 ### 代码
@@ -1551,4 +2089,3 @@ leetcode链接：[https://leetcode-cn.com/problems/diao-zheng-shu-zu-shun-xu-shi
 ```java
 
 ```
-
