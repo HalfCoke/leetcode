@@ -1662,7 +1662,9 @@ leetcode链接：[https://leetcode-cn.com/problems/fan-zhuan-lian-biao-lcof/](ht
 - `0 <= 节点个数 <= 5000`
 
 ### 解法
+
 迭代反转
+
 ### 代码
 
 ```java
@@ -1702,6 +1704,7 @@ public class Solution {
 leetcode链接：[https://leetcode-cn.com/problems/he-bing-liang-ge-pai-xu-de-lian-biao-lcof/](https://leetcode-cn.com/problems/he-bing-liang-ge-pai-xu-de-lian-biao-lcof/)
 
 ### 题目描述
+
 输入两个递增排序的链表，合并这两个链表并使新链表中的节点仍然是递增排序的。
 
 **示例 1：**
@@ -1714,8 +1717,11 @@ leetcode链接：[https://leetcode-cn.com/problems/he-bing-liang-ge-pai-xu-de-li
 **限制：**
 
 - `0 <= 链表长度 <= 1000`
+
 ### 解法
+
 遍历两个列表
+
 ### 代码
 
 ```java
@@ -1777,6 +1783,7 @@ public class Solution {
 leetcode链接：[https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/](https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/)
 
 ### 题目描述
+
 输入两棵二叉树 A 和 B，判断 B 是不是 A W 的子结构。(约定空树不是任意一个树的子结构)
 
 B 是 A 的子结构， 即 A 中有出现和 B 相同的结构和节点值。
@@ -1820,6 +1827,7 @@ B 是 A 的子结构， 即 A 中有出现和 B 相同的结构和节点值。
 **限制：**
 
 - `0 <= 节点个数 <= 10000`
+
 ### 解法
 
 ### 代码
@@ -1849,6 +1857,7 @@ public class Solution {
 leetcode链接：[https://leetcode-cn.com/problems/er-cha-shu-de-jing-xiang-lcof/](https://leetcode-cn.com/problems/er-cha-shu-de-jing-xiang-lcof/)
 
 ### 题目描述
+
 请完成一个函数，输入一个二叉树，该函数输出它的镜像。
 
 例如输入：
@@ -1881,8 +1890,11 @@ leetcode链接：[https://leetcode-cn.com/problems/er-cha-shu-de-jing-xiang-lcof
 **限制：**
 
 - `0 <= 节点个数 <= 1000`
+
 ### 解法
+
 递归
+
 ### 代码
 
 ```java
@@ -1905,10 +1917,13 @@ public class Solution {
 }
 
 ```
+
 ## 剑指 Offer 28. 对称的二叉树
+
 leetcode链接：[https://leetcode-cn.com/problems/dui-cheng-de-er-cha-shu-lcof/](https://leetcode-cn.com/problems/dui-cheng-de-er-cha-shu-lcof/)
 
 ### 题目描述
+
 请实现一个函数，用来判断一棵二叉树是不是对称的。如果一棵二叉树和它的镜像一样，那么它是对称的。
 
 例如，二叉树  `[1,2,2,3,4,4,3]` 是对称的。
@@ -1944,6 +1959,7 @@ leetcode链接：[https://leetcode-cn.com/problems/dui-cheng-de-er-cha-shu-lcof/
 输入：root = [1,2,2,null,3,null,3]
 输出：false
 ```
+
 ### 解法
 
 ### 代码
@@ -1994,6 +2010,7 @@ public class Solution {
 leetcode链接：[https://leetcode-cn.com/problems/shun-shi-zhen-da-yin-ju-zhen-lcof/](https://leetcode-cn.com/problems/shun-shi-zhen-da-yin-ju-zhen-lcof/)
 
 ### 题目描述
+
 输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字。
 
 **示例 1：**
@@ -2014,6 +2031,7 @@ leetcode链接：[https://leetcode-cn.com/problems/shun-shi-zhen-da-yin-ju-zhen-
 
 - `0 <= matrix.length <= 100`
 - `0 <= matrix[i].length <= 100`
+
 ### 解法
 
 ### 代码
@@ -2050,9 +2068,11 @@ public class Solution {
 ```
 
 ## 剑指 Offer 30. 包含min函数的栈
+
 leetcode链接：[https://leetcode-cn.com/problems/bao-han-minhan-shu-de-zhan-lcof/](https://leetcode-cn.com/problems/bao-han-minhan-shu-de-zhan-lcof/)
 
 ### 题目描述
+
 定义栈的数据结构，请在该类型中实现一个能够得到栈的最小元素的 min 函数在该栈中，调用 min、push 及 pop 的时间复杂度都是 O(1)。
 
 **示例:**
@@ -2071,14 +2091,360 @@ minStack.min();   --> 返回 -2.
 **提示：**
 
 - 各函数的调用总次数不超过 20000 次
+
 ### 解法
+
+一个栈保存正常压栈数据，另一个栈仅保存比栈顶数据小的数据
 
 ### 代码
 
 ```java
+class MinStack {
+
+    Stack<Integer> dataStore;
+    Stack<Integer> minStore;
+
+    /**
+     * initialize your data structure here.
+     */
+    public MinStack() {
+        dataStore = new Stack<>();
+        minStore = new Stack<>();
+    }
+
+    public void push(int x) {
+        dataStore.push(x);
+        if (minStore.empty() || x <= minStore.peek()) {
+            minStore.push(x);
+        }
+    }
+
+    public void pop() {
+        int x = dataStore.pop();
+        if (x == minStore.peek()) {
+            minStore.pop();
+        }
+    }
+
+    public int top() {
+        return dataStore.peek();
+    }
+
+    public int min() {
+        return minStore.peek();
+    }
+}
+```
+
+## 剑指 Offer 31. 栈的压入、弹出序列
+
+leetcode:
+链接：[https://leetcode-cn.com/problems/zhan-de-ya-ru-dan-chu-xu-lie-lcof/](https://leetcode-cn.com/problems/zhan-de-ya-ru-dan-chu-xu-lie-lcof/)
+
+### 题目描述
+
+输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否为该栈的弹出顺序。假设压入栈的所有数字均不相等。例如，序列 {1,2,3,4,5} 是某栈的压栈序列，序列 {4,5,3,2,1} 是该压栈序列对应的一个弹出序列，但
+{4,3,5,1,2} 就不可能是该压栈序列的弹出序列。
+
+**示例 1：**
+
+```
+输入：pushed = [1,2,3,4,5], popped = [4,5,3,2,1]
+输出：true
+解释：我们可以按以下顺序执行：
+push(1), push(2), push(3), push(4), pop() -> 4,
+push(5), pop() -> 5, pop() -> 3, pop() -> 2, pop() -> 1
+```
+
+**示例 2：**
+
+```
+输入：pushed = [1,2,3,4,5], popped = [4,3,5,1,2]
+输出：false
+解释：1 不能在 2 之前弹出。
+```
+
+**提示：**
+
+1. `0 <= pushed.length == popped.length <= 1000`
+2. `0 <= pushed[i], popped[i] < 1000`
+3. `pushed`  是  `popped`  的排列。
+
+### 解法
+
+使用辅助栈
+
+### 代码
+
+```java
+import org.junit.Assert;
+
+import java.util.Stack;
+
+public class Solution {
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        int[] pushed = {1, 2, 3, 4, 5};
+        int[] popped = {4, 5, 3, 2, 1};
+        Assert.assertTrue(solution.validateStackSequences(pushed, popped));
+
+        Assert.assertTrue(solution.validateStackSequences(new int[]{1, 0}, new int[]{1, 0}));
+
+    }
+
+    public boolean validateStackSequences(int[] pushed, int[] popped) {
+        if (pushed == null || pushed.length == 0) return true;
+        Stack<Integer> stack = new Stack<>();
+        int pos = 0;
+        for (int push : pushed) {
+            stack.push(push);
+            while (!stack.isEmpty() && stack.peek() == popped[pos]) {
+                stack.pop();
+                pos++;
+            }
+        }
+        return stack.isEmpty();
+    }
+}
 
 ```
 
+## 剑指 Offer 32 - I. 从上到下打印二叉树
+
+leetcode链接：[https://leetcode-cn.com/problems/cong-shang-dao-xia-da-yin-er-cha-shu-lcof/](https://leetcode-cn.com/problems/cong-shang-dao-xia-da-yin-er-cha-shu-lcof/)
+
+### 题目描述
+
+从上到下打印出二叉树的每个节点，同一层的节点按照从左到右的顺序打印。
+
+**例如:**
+
+给定二叉树: `[3,9,20,null,null,15,7]`,
+
+```
+    3
+   / \
+  9  20
+    /  \
+   15   7
+```
+
+**返回：**
+
+```
+[3,9,20,15,7]
+```
+
+**提示：**
+
+- `节点总数 <= 1000`
+
+### 解法
+
+层序遍历
+
+### 代码
+
+```java
+package leetcode.problem32.problem32_1;
+
+import leetcode.problem32.TreeNode;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+public class Solution {
+    public static void main(String[] args) {
+
+    }
+
+    public int[] levelOrder(TreeNode root) {
+        if (root == null) return new int[0];
+        List<Integer> res = new ArrayList<>();
+        List<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            TreeNode cur = queue.remove(0);
+            res.add(cur.val);
+            if (cur.left != null) {
+                queue.add(cur.left);
+            }
+            if (cur.right != null) {
+                queue.add(cur.right);
+            }
+        }
+        return res.stream().mapToInt(value -> value).toArray();
+    }
+}
+
+```
+
+## 剑指 Offer 32 - II. 从上到下打印二叉树 II
+
+leetcode链接：[https://leetcode-cn.com/problems/cong-shang-dao-xia-da-yin-er-cha-shu-ii-lcof/](https://leetcode-cn.com/problems/cong-shang-dao-xia-da-yin-er-cha-shu-ii-lcof/)
+
+### 题目描述
+
+从上到下按层打印二叉树，同一层的节点按从左到右的顺序打印，每一层打印到一行。
+
+**例如:**
+
+给定二叉树: `[3,9,20,null,null,15,7]`,
+
+```
+    3
+   / \
+  9  20
+    /  \
+   15   7
+```
+
+返回其层次遍历结果：
+
+```
+[
+  [3],
+  [9,20],
+  [15,7]
+]
+```
+
+**提示：**
+
+- `节点总数 <= 1000`
+
+### 解法
+
+层序遍历保存中间结果
+
+### 代码
+
+```java
+import java.util.LinkedList;
+import java.util.List;
+
+public class Solution {
+    public static void main(String[] args) {
+
+    }
+
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        if (root == null) return new LinkedList<>();
+
+        List<List<Integer>> res = new LinkedList<>();
+        List<TreeNode> queue = new LinkedList<>();
+
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            List<TreeNode> temp = new LinkedList<>();
+            List<Integer> tempRes = new LinkedList<>();
+            while (!queue.isEmpty()) {
+                TreeNode node = queue.remove(0);
+                tempRes.add(node.val);
+                if (node.left != null) {
+                    temp.add(node.left);
+                }
+                if (node.right != null) {
+                    temp.add(node.right);
+                }
+            }
+            res.add(tempRes);
+            queue = temp;
+        }
+        return res;
+    }
+}
+
+```
+
+## 剑指 Offer 32 - III. 从上到下打印二叉树 III
+
+leetcode链接：[https://leetcode-cn.com/problems/cong-shang-dao-xia-da-yin-er-cha-shu-iii-lcof/](https://leetcode-cn.com/problems/cong-shang-dao-xia-da-yin-er-cha-shu-iii-lcof/)
+
+### 题目描述
+
+请实现一个函数按照之字形顺序打印二叉树，即第一行按照从左到右的顺序打印，第二层按照从右到左的顺序打印，第三行再按照从左到右的顺序打印，其他行以此类推。
+
+**例如:**
+
+给定二叉树: `[3,9,20,null,null,15,7]`,
+
+```
+    3
+   / \
+  9  20
+    /  \
+   15   7
+```
+
+返回其层次遍历结果：
+
+```
+[
+  [3],
+  [20,9],
+  [15,7]
+]
+```
+
+**提示：**
+
+- `节点总数 <= 1000`
+### 解法
+注意切换数据写入和读取的顺序
+### 代码
+
+```java
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.List;
+
+public class Solution {
+    public static void main(String[] args) {
+
+    }
+
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        if (root == null) return new LinkedList<>();
+
+        Deque<TreeNode> queue = new ArrayDeque<>();
+        Deque<TreeNode> level = new ArrayDeque<>();
+        Deque<TreeNode> exchange;
+
+        List<List<Integer>> res = new LinkedList<>();
+        int levelNum = 0;
+        queue.add(root);
+
+        while (!queue.isEmpty()) {
+            List<Integer> tmp = new LinkedList<>();
+            exchange = level;
+            level = queue;
+            queue = exchange;
+            if (levelNum % 2 == 0) {
+                while (!level.isEmpty()) {
+                    TreeNode cur = level.pollFirst();
+                    tmp.add(cur.val);
+                    if (cur.left != null) queue.add(cur.left);
+                    if (cur.right != null) queue.add(cur.right);
+                }
+            } else {
+                while (!level.isEmpty()) {
+                    TreeNode cur = level.pollLast();
+                    tmp.add(cur.val);
+                    if (cur.right != null) queue.addFirst(cur.right);
+                    if (cur.left != null) queue.addFirst(cur.left);
+                }
+            }
+            levelNum++;
+            res.add(tmp);
+        }
+        return res;
+    }
+}
+
+```
 
 ### 题目描述
 
