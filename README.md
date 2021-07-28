@@ -29,6 +29,14 @@
 - [剑指 Offer 28. 对称的二叉树](#剑指-Offer-28-对称的二叉树)
 - [剑指 Offer 29. 顺时针打印矩阵](#剑指-Offer-29-顺时针打印矩阵)
 - [剑指 Offer 30. 包含min函数的栈](#剑指-Offer-30-包含min函数的栈)
+- [剑指 Offer 31. 栈的压入、弹出序列](#剑指-Offer-31-栈的压入、弹出序列)
+- [剑指 Offer 32 - I. 从上到下打印二叉树](#剑指-Offer-32-I-从上到下打印二叉树)
+- [剑指 Offer 32 - II. 从上到下打印二叉树 II](#剑指-Offer-32-II-从上到下打印二叉树-II)
+- [剑指 Offer 32 - III. 从上到下打印二叉树 III](#剑指-Offer-32-III-从上到下打印二叉树-III)
+- [剑指 Offer 33. 二叉搜索树的后序遍历序列](#剑指-Offer-33-二叉搜索树的后序遍历序列)
+- [剑指 Offer 34. 二叉树中和为某一值的路径](#剑指-Offer-34-二叉树中和为某一值的路径)
+- [剑指 Offer 35. 复杂链表的复制](#剑指-Offer-35-复杂链表的复制)
+- [剑指 Offer 36. 二叉搜索树与双向链表](剑指-Offer-36-二叉搜索树与双向链表)
 
 ## 剑指 Offer 03. 数组中重复的数字
 
@@ -2391,8 +2399,11 @@ leetcode链接：[https://leetcode-cn.com/problems/cong-shang-dao-xia-da-yin-er-
 **提示：**
 
 - `节点总数 <= 1000`
+
 ### 解法
+
 注意切换数据写入和读取的顺序
+
 ### 代码
 
 ```java
@@ -2441,6 +2452,344 @@ public class Solution {
             res.add(tmp);
         }
         return res;
+    }
+}
+
+```
+
+## 剑指 Offer 33. 二叉搜索树的后序遍历序列
+
+leetcode链接：[https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof/](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof/)
+
+### 题目描述
+
+输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历结果。如果是则返回  `true`，否则返回  `false`。假设输入的数组的任意两个数字都互不相同。
+
+参考以下这棵二叉搜索树：
+
+```
+     5
+    / \
+   2   6
+  / \
+ 1   3
+```
+
+**示例 1：**
+
+```
+输入: [1,6,3,2,5]
+输出: false
+```
+
+**示例 2：**
+
+```
+输入: [1,3,2,6,5]
+输出: true
+```
+
+**提示：**
+
+- `数组长度 <= 1000`
+
+### 解法
+
+递归或遍历方法
+
+### 代码
+
+```java
+package leetcode.problem33;
+
+import org.junit.Assert;
+
+import java.util.Stack;
+
+public class Solution {
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        Assert.assertTrue(solution.verifyPostorder(new int[]{1, 3, 2, 6, 5}));
+        Assert.assertFalse(solution.verifyPostorder(new int[]{1, 6, 3, 2, 5}));
+    }
+
+    public boolean verifyPostorder(int[] postorder) {
+        if (postorder == null || postorder.length <= 1) return true;
+        int root = Integer.MAX_VALUE;
+        Stack<Integer> stack = new Stack<>();
+        for (int i = postorder.length - 1; i >= 0; i--) {
+            if (postorder[i] > root) return false;
+            while (!stack.isEmpty() && stack.peek() > postorder[i]) {
+                root = stack.pop();
+            }
+            stack.push(postorder[i]);
+
+        }
+        return true;
+    }
+
+    public boolean verifyPostorder1(int[] postorder) {
+        return recur(0, postorder.length - 1, postorder);
+    }
+
+    private boolean recur(int start, int end, int[] postorder) {
+        if (start >= end) return true;
+        int index = start;
+        while (postorder[index] < postorder[end]) index++;
+        int midIndex = index;
+        while (postorder[index] > postorder[end]) index++;
+        return index == end && recur(start, midIndex - 1, postorder) && recur(midIndex, end - 1, postorder);
+    }
+}
+
+```
+
+## 剑指 Offer 34. 二叉树中和为某一值的路径
+
+leetcode链接：[https://leetcode-cn.com/problems/er-cha-shu-zhong-he-wei-mou-yi-zhi-de-lu-jing-lcof/](https://leetcode-cn.com/problems/er-cha-shu-zhong-he-wei-mou-yi-zhi-de-lu-jing-lcof/)
+
+### 题目描述
+
+输入一棵二叉树和一个整数，打印出二叉树中节点值的和为输入整数的所有路径。从树的根节点开始往下一直到叶节点所经过的节点形成一条路径。
+
+**示例:**
+
+给定如下二叉树，以及目标和  `sum = 22`，
+
+```
+              5
+             / \
+            4   8
+           /   / \
+          11  13  4
+         /  \    / \
+        7    2  5   1
+```
+
+返回:
+
+```
+[
+   [5,4,11,2],
+   [5,8,4,5]
+]
+```
+
+**提示：**
+
+1. `节点总数 <= 10000`
+
+### 解法
+
+回溯法，注意叶子节点
+
+### 代码
+
+```java
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+public class Solution {
+
+    public static void main(String[] args) {
+
+    }
+
+    public List<List<Integer>> pathSum(TreeNode root, int target) {
+        List<List<Integer>> res = new LinkedList<>();
+        recall(root, target, new ArrayList<>(), res);
+        return res;
+    }
+
+    private void recall(TreeNode root, int target, List<Integer> path, List<List<Integer>> res) {
+        if (root == null) return;
+        path.add(root.val);
+        if (root.left == null && root.right == null && path.stream().mapToInt(Integer::intValue).sum() == target) {
+            res.add(new LinkedList<>(path));
+        }
+        recall(root.left, target, path, res);
+        recall(root.right, target, path, res);
+        path.remove(path.size() - 1);
+    }
+}
+
+```
+
+## 剑指 Offer 35. 复杂链表的复制
+
+leetcode链接：[https://leetcode-cn.com/problems/fu-za-lian-biao-de-fu-zhi-lcof/](https://leetcode-cn.com/problems/fu-za-lian-biao-de-fu-zhi-lcof/)
+
+### 题目描述
+
+请实现 `copyRandomList` 函数，复制一个复杂链表。在复杂链表中，每个节点除了有一个 `next` 指针指向下一个节点，还有一个 `random` 指针指向链表中的任意节点或者 `null`。
+
+**示例 1：**
+
+![](https://gitee.com/halfcoke/blog_img/raw/master/20210728135112.png)
+
+```
+输入：head = [[7,null],[13,0],[11,4],[10,2],[1,0]]
+输出：[[7,null],[13,0],[11,4],[10,2],[1,0]]
+```
+
+**示例 2：**
+
+![](https://gitee.com/halfcoke/blog_img/raw/master/20210728135056.png)
+
+```
+输入：head = [[1,1],[2,1]]
+输出：[[1,1],[2,1]]
+```
+
+**示例 3：**
+
+![](https://gitee.com/halfcoke/blog_img/raw/master/20210728135125.png)
+
+```
+输入：head = [[3,null],[3,0],[3,null]]
+输出：[[3,null],[3,0],[3,null]]
+```
+
+**示例 4：**
+
+```
+输入：head = []
+输出：[]
+解释：给定的链表为空（空指针），因此返回 null。
+```
+
+**提示：**
+
+- `-10000 <= Node.val <= 10000`
+- `Node.random`  为空（null）或指向链表中的节点。
+- 节点数目不超过 1000 。
+
+### 解法
+
+映射新旧节点
+
+### 代码
+
+```java
+import java.util.HashMap;
+
+public class Solution {
+    public static void main(String[] args) {
+
+    }
+
+    public Node copyRandomList(Node head) {
+        if (head == null) return null;
+        HashMap<Node, Node> nodeMap = new HashMap<>();
+        Node cur = head;
+        Node pre = null;
+        while (cur != null) {
+            Node newNode = new Node(cur.val);
+            nodeMap.put(cur, newNode);
+
+            if (pre != null) {
+                Node node = nodeMap.get(pre);
+                node.next = newNode;
+            }
+            pre = cur;
+            cur = cur.next;
+        }
+
+        cur = head;
+        while (cur != null) {
+            if (cur.random != null) {
+                Node node = nodeMap.get(cur);
+                node.random = nodeMap.get(cur.random);
+            }
+            cur = cur.next;
+        }
+        return nodeMap.get(head);
+    }
+}
+```
+
+## 剑指 Offer 36. 二叉搜索树与双向链表
+
+leetcode链接：[https://leetcode-cn.com/problems/er-cha-sou-suo-shu-yu-shuang-xiang-lian-biao-lcof/](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-yu-shuang-xiang-lian-biao-lcof/)
+
+### 题目描述
+
+输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的循环双向链表。要求不能创建任何新的节点，只能调整树中节点指针的指向。
+
+为了让您更好地理解问题，以下面的二叉搜索树为例：
+
+![](https://gitee.com/halfcoke/blog_img/raw/master/20210728141713.png)
+
+我们希望将这个二叉搜索树转化为双向循环链表。链表中的每个节点都有一个前驱和后继指针。对于双向循环链表，第一个节点的前驱是最后一个节点，最后一个节点的后继是第一个节点。
+
+下图展示了上面的二叉搜索树转化成的链表。“head” 表示指向链表中有最小元素的节点。
+
+![](https://gitee.com/halfcoke/blog_img/raw/master/20210728141723.png)
+
+特别地，我们希望可以就地完成转换操作。当转化完成以后，树中节点的左指针需要指向前驱，树中节点的右指针需要指向后继。还需要返回链表中的第一个节点的指针。
+
+**注意**：本题与主站 426 题相同：https://leetcode-cn.com/problems/convert-binary-search-tree-to-sorted-doubly-linked-list/
+
+**注意**：此题对比原题有改动。
+
+### 解法
+
+先中序遍历，再迭代结果
+
+### 代码
+
+```java
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+
+public class Solution {
+    public static void main(String[] args) {
+
+        Solution solution = new Solution();
+        Node node = new Node(4);
+        node.right = new Node(5);
+        node.left = new Node(2);
+        node.left.left = new Node(1);
+        node.left.right = new Node(3);
+        solution.treeToDoublyList(node);
+
+    }
+
+    public Node treeToDoublyList(Node root) {
+        if (root == null) return null;
+        List<Node> midOrder = middleOrder(root);
+
+        for (int i = 0; i < midOrder.size(); i++) {
+            midOrder.get(i).right = midOrder.get((i + 1) % midOrder.size());
+            midOrder.get(i).left = midOrder.get(((i - 1) + midOrder.size()) % midOrder.size());
+        }
+        return midOrder.get(0);
+    }
+
+    private List<Node> middleOrder(Node root) {
+        Stack<Node> nodeStack = new Stack<>();
+        ArrayList<Node> nodes = new ArrayList<>();
+
+        nodeStack.push(root);
+        while (!nodeStack.isEmpty()) {
+            Node peek = nodeStack.peek();
+            if (peek.left != null) {
+                nodeStack.push(peek.left);
+                peek.left = null;
+                continue;
+            }
+
+            nodes.add(nodeStack.pop());
+
+            if (peek.right != null) {
+                nodeStack.push(peek.right);
+                peek.right = null;
+            }
+        }
+        return nodes;
     }
 }
 
