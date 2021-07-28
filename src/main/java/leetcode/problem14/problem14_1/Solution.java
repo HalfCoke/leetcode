@@ -1,4 +1,4 @@
-package leetcode.problem14_1;
+package leetcode.problem14.problem14_1;
 
 import org.junit.Assert;
 
