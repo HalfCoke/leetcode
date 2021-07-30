@@ -2795,6 +2795,314 @@ public class Solution {
 
 ```
 
+## 剑指 Offer 37. 序列化二叉树
+
+leetcode链接：[https://leetcode-cn.com/problems/xu-lie-hua-er-cha-shu-lcof/](https://leetcode-cn.com/problems/xu-lie-hua-er-cha-shu-lcof/)
+
+### 题目描述
+
+你需要设计一个算法来实现二叉树的序列化与反序列化。这里不限定你的序列 / 反序列化算法执行逻辑，你只需要保证一个二叉树可以被序列化为一个字符串并且将这个字符串反序列化为原始的树结构。
+
+提示：输入输出格式与 LeetCode 目前使用的方式一致，详情请参阅[LeetCode序列化二叉树的格式](https://leetcode-cn.com/faq/#binary-tree)
+你并非必须采取这种方式，你也可以采用其他的方法解决这个问题
+
+**示例:**
+
+```
+你可以将以下二叉树：
+
+    1
+   / \
+  2   3
+     / \
+    4   5
+
+序列化为 "[1,2,3,null,null,4,5]"
+```
+
+注意：本题与主站 297 题相同：https://leetcode-cn.com/problems/serialize-and-deserialize-binary-tree/
+
+### 解法
+
+### 代码
+
+```java
+
+import java.util.*;
+
+public class Solution {
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(3);
+        root.right.left = new TreeNode(4);
+        root.right.right = new TreeNode(5);
+        System.out.println(solution.serialize(root));
+        TreeNode node = solution.deserialize(solution.serialize(root));
+        System.out.println(node);
+
+
+        root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        System.out.println(solution.serialize(root));
+        node = solution.deserialize("[5,2,3,null,null,2,4,3,1]");
+        System.out.println(node);
+
+        node = solution.deserialize("[1,null,2]");
+        System.out.println(node);
+
+        node = solution.deserialize("[1,2,null,3,null,4,null,5]");
+        System.out.println(node);
+    }
+
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        if (root == null) return "[]";
+        StringBuilder res = new StringBuilder("[");
+        Queue<TreeNode> queue = new LinkedList<>() {{
+            add(root);
+        }};
+        while (!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+            if (node != null) {
+                res.append(node.val + ",");
+                queue.add(node.left);
+                queue.add(node.right);
+            } else res.append("null,");
+        }
+        res.deleteCharAt(res.length() - 1);
+        res.append("]");
+        return res.toString();
+    }
+
+    // Decodes your encoded data to tree.
+
+    public TreeNode deserialize(String data) {
+        if (data.equals("[]")) return null;
+        String[] vals = data.substring(1, data.length() - 1).split(",");
+        TreeNode root = new TreeNode(Integer.parseInt(vals[0]));
+        Queue<TreeNode> queue = new LinkedList<>() {{
+            add(root);
+        }};
+        int i = 1;
+        while (!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+            if (i < vals.length && !vals[i].equals("null")) {
+                node.left = new TreeNode(Integer.parseInt(vals[i]));
+                queue.add(node.left);
+            }
+            i++;
+            if (i < vals.length && !vals[i].equals("null")) {
+                node.right = new TreeNode(Integer.parseInt(vals[i]));
+                queue.add(node.right);
+            }
+            i++;
+        }
+        return root;
+    }
+}
+
+```
+
+## 剑指 Offer 38. 字符串的排列
+
+leetcode链接：[https://leetcode-cn.com/problems/zi-fu-chuan-de-pai-lie-lcof/](https://leetcode-cn.com/problems/zi-fu-chuan-de-pai-lie-lcof/)
+
+### 题目描述
+
+输入一个字符串，打印出该字符串中字符的所有排列。
+
+你可以以任意顺序返回这个字符串数组，但里面不能有重复元素。
+
+**示例:**
+
+```
+输入：s = "abc"
+输出：["abc","acb","bac","bca","cab","cba"]
+```
+
+**限制：**
+
+- `1 <= s 的长度 <= 8`
+-
+
+### 解法
+
+回溯
+
+### 代码
+
+```java
+package leetcode.problem38;
+
+import java.util.Arrays;
+import java.util.HashSet;
+
+public class Solution {
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        String[] res = solution.permutation("abc");
+        System.out.println(Arrays.toString(res));
+    }
+
+    public String[] permutation(String s) {
+        boolean[] flag = new boolean[s.length()];
+        HashSet<String> res = new HashSet<>();
+
+        order(s, flag, new StringBuilder(), res);
+        return res.toArray(new String[0]);
+    }
+
+    private void order(String s, boolean[] flag, StringBuilder temp, HashSet<String> res) {
+        if (temp.length() == s.length()) {
+            res.add(temp.toString());
+            return;
+        }
+        for (int i = 0; i < s.length(); i++) {
+            if (!flag[i]) {
+                temp.append(s.charAt(i));
+                flag[i] = true;
+                order(s, flag, temp, res);
+                flag[i] = false;
+                temp.deleteCharAt(temp.length() - 1);
+            }
+        }
+    }
+}
+
+```
+
+## 剑指 Offer 39. 数组中出现次数超过一半的数字
+
+leetcode链接：[https://leetcode-cn.com/problems/shu-zu-zhong-chu-xian-ci-shu-chao-guo-yi-ban-de-shu-zi-lcof/](https://leetcode-cn.com/problems/shu-zu-zhong-chu-xian-ci-shu-chao-guo-yi-ban-de-shu-zi-lcof/)
+
+### 题目描述
+
+数组中有一个数字出现的次数超过数组长度的一半，请找出这个数字。
+
+你可以假设数组是非空的，并且给定的数组总是存在多数元素。
+
+**示例 1:**
+
+```
+输入: [1, 2, 3, 2, 2, 2, 5, 4, 2]
+输出: 2
+```
+
+**限制：**
+
+- `1 <= 数组长度 <= 50000`
+
+### 解法
+
+先排序，然后直接输出数组中值即可
+
+### 代码
+
+```java
+package leetcode.problem39;
+
+import java.util.Arrays;
+
+public class Solution {
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+    }
+
+    public int majorityElement(int[] nums) {
+        Arrays.sort(nums);
+        return nums[nums.length / 2];
+    }
+
+    private int[] quickSort(int[] nums) {
+        int[] copy = Arrays.copyOf(nums, nums.length);
+        return sort(copy, 0, copy.length);
+    }
+
+    private int[] sort(int[] nums, int start, int end) {
+        if (start >= end) {
+            return nums;
+        }
+        int partitionIndex = partitionIndex(nums, start, end);
+        nums = sort(nums, start, partitionIndex);
+        nums = sort(nums, partitionIndex + 1, end);
+        return nums;
+    }
+
+    private int partitionIndex(int[] nums, int start, int end) {
+        int index = start + 1;
+        for (int i = index; i < end; i++) {
+            if (nums[i] < nums[start]) {
+                swap(nums, index, i);
+                index++;
+            }
+        }
+        swap(nums, index - 1, start);
+        return index - 1;
+    }
+
+    private void swap(int[] arr, int x, int y) {
+        int t = arr[x];
+        arr[x] = arr[y];
+        arr[y] = t;
+    }
+}
+
+```
+
+## 剑指 Offer 40. 最小的k个数
+
+leetcode链接：[https://leetcode-cn.com/problems/zui-xiao-de-kge-shu-lcof/](https://leetcode-cn.com/problems/zui-xiao-de-kge-shu-lcof/)
+
+### 题目描述
+
+输入整数数组 `arr`，找出其中最小的 `k` 个数。例如，输入 4、5、1、6、2、7、3、8 这 8 个数字，则最小的 4 个数字是 1、2、3、4。
+
+**示例 1：**
+
+```
+输入：arr = [3,2,1], k = 2
+输出：[1,2] 或者 [2,1]
+```
+
+**示例 2：**
+
+```
+输入：arr = [0,1,2,1], k = 1
+输出：[0]
+```
+
+**限制：**
+
+- `0 <= k <= arr.length <= 10000`
+- `0 <= arr[i] <= 10000`
+
+### 解法
+排序后输出，注意重复值
+### 代码
+
+```java
+import java.util.Arrays;
+
+public class Solution {
+    public int[] getLeastNumbers(int[] arr, int k) {
+        if (arr.length == 0) return new int[0];
+        Arrays.sort(arr);
+        int[] res = new int[k];
+        Arrays.fill(res, -1);
+        int pos = 0;
+        for (int i = 0; i < arr.length && pos < k; i++) {
+            if (res[pos] != arr[i]) {
+                res[pos++] = arr[i];
+            }
+        }
+        return res;
+    }
+}
+```
+
 ### 题目描述
 
 ### 解法
