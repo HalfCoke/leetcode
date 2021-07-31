@@ -3080,7 +3080,9 @@ leetcode链接：[https://leetcode-cn.com/problems/zui-xiao-de-kge-shu-lcof/](ht
 - `0 <= arr[i] <= 10000`
 
 ### 解法
+
 排序后输出，注意重复值
+
 ### 代码
 
 ```java
@@ -3101,6 +3103,151 @@ public class Solution {
         return res;
     }
 }
+```
+
+## 剑指 Offer 41. 数据流中的中位数
+
+leetcode链接：[https://leetcode-cn.com/problems/shu-ju-liu-zhong-de-zhong-wei-shu-lcof/](https://leetcode-cn.com/problems/shu-ju-liu-zhong-de-zhong-wei-shu-lcof/)
+
+### 题目描述
+
+如何得到一个数据流中的中位数？如果从数据流中读出奇数个数值，那么中位数就是所有数值排序之后位于中间的数值。如果从数据流中读出偶数个数值，那么中位数就是所有数值排序之后中间两个数的平均值。
+
+例如，
+
+`[2,3,4]`  的中位数是 3
+
+`[2,3]` 的中位数是 (2 + 3) / 2 = 2.5
+
+设计一个支持以下两种操作的数据结构：
+
+- void addNum(int num) - 从数据流中添加一个整数到数据结构中。
+- double findMedian() - 返回目前所有元素的中位数。
+
+**示例 1：**
+
+```
+输入：
+["MedianFinder","addNum","addNum","findMedian","addNum","findMedian"]
+[[],[1],[2],[],[3],[]]
+输出：[null,null,null,1.50000,null,2.00000]
+```
+
+**示例 2：**
+
+```
+输入：
+["MedianFinder","addNum","findMedian","addNum","findMedian"]
+[[],[2],[],[3],[]]
+输出：[null,null,2.00000,null,2.50000]
+```
+
+**限制：**
+
+- 最多会对 addNum、findMedia 进行 50000 次调用。
+
+注意：本题与主站 295 题相同：https://leetcode-cn.com/problems/find-median-from-data-stream/
+
+### 解法
+
+使用大顶堆和小顶堆
+
+### 代码
+
+```java
+
+import java.util.PriorityQueue;
+import java.util.Queue;
+
+public class MedianFinder {
+    Queue<Integer> A, B;
+
+    /**
+     * initialize your data structure here.
+     */
+    public MedianFinder() {
+        A = new PriorityQueue<>(); // 小顶堆
+        B = new PriorityQueue<>((o1, o2) -> o2 - o1); // 大顶堆
+    }
+
+    public void addNum(int num) {
+        int n = A.size();
+        int m = B.size();
+        if (n == m) {
+            A.add(num);
+            B.add(A.poll());
+        } else {
+            B.add(num);
+            A.add(B.poll());
+        }
+    }
+
+    public double findMedian() {
+        int n = A.size();
+        int m = B.size();
+        if (n == m) {
+            return (double) (A.peek() + B.peek()) / 2;
+        } else {
+            return (double) B.peek();
+        }
+    }
+}
+
+```
+
+## 剑指 Offer 42. 连续子数组的最大和
+
+leetcode链接：[https://leetcode-cn.com/problems/lian-xu-zi-shu-zu-de-zui-da-he-lcof/](https://leetcode-cn.com/problems/lian-xu-zi-shu-zu-de-zui-da-he-lcof/)
+
+### 题目描述
+
+输入一个整型数组，数组里有正数也有负数。数组中的一个或连续多个整数组成一个子数组。求所有子数组的和的最大值。
+
+要求时间复杂度为 O(n)。
+
+**示例 1:**
+
+```
+输入: nums = [-2,1,-3,4,-1,2,1,-5,4]
+输出: 6
+解释: 连续子数组 [4,-1,2,1] 的和最大，为 6。
+```
+
+**提示：**
+
+- `1 <= arr.length <= 10^5`
+- `-100 <= arr[i] <= 100`
+
+<p>注意：本题与主站 53 题相同：<a href="https://leetcode-cn.com/problems/maximum-subarray/">https://leetcode-cn.com/problems/maximum-subarray/</a></p>
+
+### 解法
+
+动态规划，dp[i]表示以第i个数结尾的子数组最大和
+
+### 代码
+
+```java
+package leetcode.problem42;
+
+public class Solution {
+    public static void main(String[] args) {
+
+    }
+
+    public int maxSubArray(int[] nums) {
+        if (nums.length == 1) return nums[0];
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+        int res = dp[0];
+        for (int i = 1; i < nums.length; i++) {
+            if (dp[i - 1] < 0) dp[i] = nums[i];
+            else dp[i] = nums[i] + dp[i - 1];
+            res = Math.max(res, dp[i]);
+        }
+        return res;
+    }
+}
+
 ```
 
 ### 题目描述
