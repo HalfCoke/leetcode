@@ -3250,6 +3250,523 @@ public class Solution {
 
 ```
 
+## 剑指 Offer 43. 1～n 整数中 1 出现的次数
+
+leetcode链接：[https://leetcode-cn.com/problems/1nzheng-shu-zhong-1chu-xian-de-ci-shu-lcof/](https://leetcode-cn.com/problems/1nzheng-shu-zhong-1chu-xian-de-ci-shu-lcof/)
+
+### 题目描述
+
+输入一个整数 `n` ，求 1 ～ n 这 n 个整数的十进制表示中 1 出现的次数。
+
+例如，输入 12，1 ～ 12 这些整数中包含 1 的数字有 1、10、11 和 12，1 一共出现了 5 次。
+
+**示例 1：**
+
+```
+输入：n = 12
+输出：5
+```
+
+**示例 2：**
+
+```
+输入：n = 13
+输出：6
+```
+
+**限制：**
+
+- `1 <= n < 2^31`
+
+注意：本题与主站 233 题相同：https://leetcode-cn.com/problems/number-of-digit-one/
+
+### 解法
+
+### 代码
+
+```java
+import org.junit.Assert;
+
+public class Solution {
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        Assert.assertEquals(5, solution.countDigitOne(12));
+        Assert.assertEquals(6, solution.countDigitOne(13));
+        Assert.assertEquals(2, solution.countDigitOne(10));
+        Assert.assertEquals(1737167499, solution.countDigitOne(1410065408));
+
+    }
+
+    public int countDigitOne(int n) {
+        int digit = 1;
+        int count = 0;
+
+        int high = n / 10, cur = n % 10, low = 0;
+
+        while (high != 0 || cur != 0) {
+            if (cur == 0) {
+                count += high * digit;
+            } else if (cur == 1) {
+                count += high * digit + low + 1;
+            } else {
+                count += (high + 1) * digit;
+            }
+            low += cur * digit;
+            cur = high % 10;
+            high = high / 10;
+            digit *= 10;
+        }
+
+        return count;
+    }
+}
+
+```
+
+## 剑指 Offer 44. 数字序列中某一位的数字
+
+leetcode链接：[https://leetcode-cn.com/problems/shu-zi-xu-lie-zhong-mou-yi-wei-de-shu-zi-lcof/](https://leetcode-cn.com/problems/shu-zi-xu-lie-zhong-mou-yi-wei-de-shu-zi-lcof/)
+
+### 题目描述
+
+数字以 0123456789101112131415…的格式序列化到一个字符序列中。在这个序列中，第 5 位（从下标 0 开始计数）是 5，第 13 位是 1，第 19 位是 4，等等。
+
+请写一个函数，求任意第 n 位对应的数字。
+
+**示例 1：**
+
+```
+输入：n = 3
+输出：3
+```
+
+**示例 2：**
+
+```
+输入：n = 11
+输出：0
+```
+
+**限制：**
+
+- `0 <= n < 2^31`
+
+注意：本题与主站 400 题相同：https://leetcode-cn.com/problems/nth-digit/
+
+### 解法
+
+分别计算不同位数的数字的总数，然后依次确定n指定位置的数字位数、数字、数字中位置
+
+注意越界问题
+
+### 代码
+
+```java
+import org.junit.Assert;
+
+public class Solution {
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        Assert.assertEquals(1, solution.findNthDigit(16));
+        Assert.assertEquals(1, solution.findNthDigit(1000000000));
+    }
+
+    public int findNthDigit(int n) {
+        if (n == 0) return 0;
+        int digit = 1;
+        long start = 1;
+        long count = 9;
+        while (n > count) {
+            n -= count;
+            digit += 1;
+            start *= 10;
+            count = digit * start * 9;
+        }
+        long num = (n - 1) / digit + start;
+        String s = String.valueOf(num);
+        return s.charAt((n - 1) % digit) - '0';
+    }
+}
+
+```
+
+## 剑指 Offer 45. 把数组排成最小的数
+
+leetcode链接：[https://leetcode-cn.com/problems/ba-shu-zu-pai-cheng-zui-xiao-de-shu-lcof/](https://leetcode-cn.com/problems/ba-shu-zu-pai-cheng-zui-xiao-de-shu-lcof/)
+
+### 题目描述
+
+输入一个正整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。
+
+**示例 1:**
+
+```
+输入: [10,2]
+输出: "102"
+```
+
+**示例 2:**
+
+```
+输入: [3,30,34,5,9]
+输出: "3033459"
+```
+
+**提示:**
+
+- `0 < nums.length <= 100`
+
+**说明:**
+
+- 输出结果可能非常大，所以你需要返回一个字符串而不是整数。
+- 拼接起来的数字可能会有前导 0，最后结果不需要去掉前导 0。
+
+### 解法
+
+自定义排序
+
+### 代码
+
+```java
+
+import org.junit.Assert;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+public class Solution {
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        Assert.assertEquals("102", solution.minNumber(new int[]{10, 2}));
+        Assert.assertEquals("3033459", solution.minNumber(new int[]{3, 30, 34, 5, 9}));
+        Assert.assertEquals("12112", solution.minNumber(new int[]{12, 121}));
+        Assert.assertEquals("1399439856075703697382478249389609",
+                solution.minNumber(new int[]{824, 938, 1399, 5607, 6973, 5703, 9609, 4398, 8247}));
+        Assert.assertEquals("10481090114311471380141714951518154817631922000206021321622281231323622362246526972732745282297030213084316332983399346235163567357536363650366436993836384639053932428344534704479848124980520854225460552956825712578459095972603862216241626563066327651165546636698674467586806685670327100720573217423747175367605784679828070810781081838353839889378939902690949149385944894569533968598279890",
+                solution.minNumber(new int[]{4704, 6306, 9385, 7536, 3462, 4798, 5422, 5529, 8070, 6241, 9094, 7846, 663, 6221, 216, 6758, 8353, 3650, 3836, 8183, 3516, 5909, 6744, 1548, 5712, 2281, 3664, 7100, 6698, 7321, 4980, 8937, 3163, 5784, 3298, 9890, 1090, 7605, 1380, 1147, 1495, 3699, 9448, 5208, 9456, 3846, 3567, 6856, 2000, 3575, 7205, 2697, 5972, 7471, 1763, 1143, 1417, 6038, 2313, 6554, 9026, 8107, 9827, 7982, 9685, 3905, 8939, 1048, 282, 7423, 6327, 2970, 4453, 5460, 3399, 9533, 914, 3932, 192, 3084, 6806, 273, 4283, 2060, 5682, 2, 2362, 4812, 7032, 810, 2465, 6511, 213, 2362, 3021, 2745, 3636, 6265, 1518, 8398}));
+    }
+
+    public String minNumber(int[] nums) {
+        return Arrays.stream(nums).mapToObj(String::valueOf)
+                .sorted((o1, o2) -> (o1 + o2).compareTo(o2 + o1)).collect(Collectors.joining());
+    }
+}
+
+```
+
+## 剑指 Offer 46. 把数字翻译成字符串
+
+leetcode链接：[https://leetcode-cn.com/problems/ba-shu-zi-fan-yi-cheng-zi-fu-chuan-lcof/](https://leetcode-cn.com/problems/ba-shu-zi-fan-yi-cheng-zi-fu-chuan-lcof/)
+
+### 题目描述
+
+给定一个数字，我们按照如下规则把它翻译为字符串：0 翻译成 “a” ，1 翻译成 “b”，……，11 翻译成 “l”，……，25 翻译成 “z”。一个数字可能有多个翻译。请编程实现一个函数，用来计算一个数字有多少种不同的翻译方法。
+
+**示例 1:**
+
+```
+输入: 12258
+输出: 5
+解释: 12258有5种不同的翻译，分别是"bccfi", "bwfi", "bczi", "mcfi"和"mzi"
+```
+
+**提示：**
+
+- 0 <= num < 2<sup>31</sup>
+
+### 解法
+
+动态规划
+
+dp[i]为以数字i结尾时翻译方法的个数
+
+注意字符串"06"不可翻译
+
+### 代码
+
+```java
+
+import org.junit.Assert;
+
+public class Solution {
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        Assert.assertEquals(5, solution.translateNum(12258));
+        Assert.assertEquals(1, solution.translateNum(26));
+        Assert.assertEquals(1, solution.translateNum(506));
+    }
+
+    public int translateNum(int num) {
+        String numString = String.valueOf(num);
+        int[] dp = new int[numString.length() + 1];
+        dp[0] = 1;
+        dp[1] = 1;
+        for (int i = 1; i < numString.length(); i++) {
+            int i1 = Integer.parseInt(numString.substring(i - 1, i + 1));
+            if (i1 < 26 && i1 > 9) {
+                dp[i + 1] += dp[i - 1];
+            }
+            dp[i + 1] += dp[i];
+        }
+        return dp[numString.length()];
+    }
+}
+
+```
+
+## 剑指 Offer 47. 礼物的最大价值
+
+leetcode链接：[https://leetcode-cn.com/problems/li-wu-de-zui-da-jie-zhi-lcof/](https://leetcode-cn.com/problems/li-wu-de-zui-da-jie-zhi-lcof/)
+
+### 题目描述
+
+在一个 `m*n` 的棋盘的每一格都放有一个礼物，每个礼物都有一定的价值（价值大于
+0）。你可以从棋盘的左上角开始拿格子里的礼物，并每次向右或者向下移动一格、直到到达棋盘的右下角。给定一个棋盘及其上面的礼物的价值，请计算你最多能拿到多少价值的礼物？
+
+**示例 1:**
+
+```
+输入:
+[
+  [1,3,1],
+  [1,5,1],
+  [4,2,1]
+]
+输出: 12
+解释: 路径 1→3→5→2→1 可以拿到最多价值的礼物
+```
+
+**提示：**
+
+- `0 < grid.length <= 200`
+- `0 < grid[0].length <= 200`
+
+### 解法
+
+动态规划
+
+### 代码
+
+```java
+
+import org.junit.Assert;
+
+public class Solution {
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        int[][] grid = new int[][]{{1, 3, 1}, {1, 5, 1}, {4, 2, 1}};
+        Assert.assertEquals(12, solution.maxValue(grid));
+    }
+
+    public int maxValue(int[][] grid) {
+        int[][] dp = new int[grid.length + 1][grid[0].length + 1];
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                dp[i + 1][j + 1] = Math.max(dp[i][j + 1], dp[i + 1][j]) + grid[i][j];
+            }
+        }
+        return dp[grid.length][grid[0].length];
+    }
+}
+
+```
+
+## 剑指 Offer 48. 最长不含重复字符的子字符串
+
+leetcode链接：[https://leetcode-cn.com/problems/zui-chang-bu-han-zhong-fu-zi-fu-de-zi-zi-fu-chuan-lcof/](https://leetcode-cn.com/problems/zui-chang-bu-han-zhong-fu-zi-fu-de-zi-zi-fu-chuan-lcof/)
+
+### 题目描述
+
+请从字符串中找出一个最长的不包含重复字符的子字符串，计算该最长子字符串的长度。
+
+**示例 1:**
+
+```
+输入: "abcabcbb"
+输出: 3
+解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
+```
+
+**示例 2:**
+
+```
+输入: "bbbbb"
+输出: 1
+解释: 因为无重复字符的最长子串是 "b"，所以其长度为 1。
+```
+
+**示例 3:**
+
+```
+输入: "pwwkew"
+输出: 3
+解释: 因为无重复字符的最长子串是 "wke"，所以其长度为 3。
+     请注意，你的答案必须是 子串 的长度，"pwke" 是一个子序列，不是子串。
+```
+
+**提示：**
+
+- `s.length <= 40000`
+
+### 解法
+
+动态规划
+
+用map保存一个字符上一次出现的位置
+
+### 代码
+
+```java
+
+import org.junit.Assert;
+
+import java.util.HashMap;
+
+public class Solution {
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        Assert.assertEquals(3, solution.lengthOfLongestSubstring("abcabcbb"));
+
+    }
+
+    public int lengthOfLongestSubstring(String s) {
+        if (s.length() == 0) return 0;
+        int res = 1;
+        int[] dp = new int[s.length()];
+        HashMap<Character, Integer> pos = new HashMap<>();
+        dp[0] = 1;
+        pos.put(s.charAt(0), 0);
+        for (int i = 1; i < s.length(); i++) {
+            int last = -1;
+            if (pos.containsKey(s.charAt(i))) {
+                last = pos.get(s.charAt(i));
+            }
+            pos.put(s.charAt(i), i);
+            if (dp[i - 1] < i - last) {
+                dp[i] = dp[i - 1] + 1;
+            } else {
+                dp[i] = i - last;
+            }
+            res = Math.max(res, dp[i]);
+        }
+        return res;
+    }
+}
+
+```
+
+## 剑指 Offer 49. 丑数
+
+leetcode链接：[https://leetcode-cn.com/problems/chou-shu-lcof/](https://leetcode-cn.com/problems/chou-shu-lcof/)
+
+### 题目描述
+
+我们把只包含因子 2、3 和 5 的数称作丑数（Ugly Number）。求按从小到大的顺序的第 n 个丑数。
+
+**示例:**
+
+```
+输入: n = 10
+输出: 12
+解释: 1, 2, 3, 4, 5, 6, 8, 9, 10, 12 是前 10 个丑数。
+```
+
+**说明:**
+
+1. `1`  是丑数。
+2. `n`  不超过 1690。
+
+### 解法
+
+动态规划，对丑数进行递推
+
+### 代码
+
+```java
+
+import org.junit.Assert;
+
+public class Solution {
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        Assert.assertEquals(12, solution.nthUglyNumber(10));
+        Assert.assertEquals(15, solution.nthUglyNumber(11));
+        System.out.println(solution.nthUglyNumber(1352));
+    }
+
+    public int nthUglyNumber(int n) {
+        int[] dp = new int[1700];
+        int a = 1, b = 1, c = 1;
+        dp[1] = 1;
+        for (int i = 2; i <= n; i++) {
+            dp[i] = Math.min(Math.min(dp[a] * 2, dp[b] * 3), dp[c] * 5);
+            if (dp[i] == dp[a] * 2) {
+                a++;
+            }
+            if (dp[i] == dp[b] * 3) {
+                b++;
+            }
+            if (dp[i] == dp[c] * 5) {
+                c++;
+            }
+        }
+
+        return dp[n];
+    }
+}
+
+```
+
+## 剑指 Offer 50. 第一个只出现一次的字符
+
+leetcode链接：[https://leetcode-cn.com/problems/di-yi-ge-zhi-chu-xian-yi-ci-de-zi-fu-lcof/](https://leetcode-cn.com/problems/di-yi-ge-zhi-chu-xian-yi-ci-de-zi-fu-lcof/)
+
+### 题目描述
+在字符串 s 中找出第一个只出现一次的字符。如果没有，返回一个单空格。
+
+**示例:**
+
+```
+s = "abaccdeff"
+返回 "b"
+
+s = ""
+返回 " "
+```
+
+**限制：**
+
+- `0 <= s 的长度 <= 50000`
+### 解法
+两次循环即可
+### 代码
+
+```java
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class Solution {
+    public static void main(String[] args) {
+
+    }
+
+    public char firstUniqChar(String s) {
+        Map<Character, Boolean> emerge = new HashMap<>();
+        for (int i = 0; i < s.length(); i++) {
+            emerge.put(s.charAt(i), !emerge.containsKey(s.charAt(i)));
+        }
+        for (int i = 0; i < s.length(); i++) {
+            if (emerge.get(s.charAt(i))) {
+                return s.charAt(i);
+            }
+        }
+        return ' ';
+    }
+}
+
+```
+
 ### 题目描述
 
 ### 解法
